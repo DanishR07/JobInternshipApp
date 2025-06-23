@@ -18,10 +18,6 @@ class LoginViewModel extends GetxController {
     isLoading.value = true;
     try {
       await authRepository.login(email, password);
-      // if (email == 'danishriasat792@gmail.com' && password == '123456') {
-      //   Get.offAllNamed('/admin');
-      // } else
-      //   Get.offAllNamed('/user_home');
       Get.toNamed('/auth_decider');
       Get.snackbar("Success", "Login successful!");
     } on FirebaseAuthException catch (e) {
