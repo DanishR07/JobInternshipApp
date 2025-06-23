@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897807971743",
+    "project_id": "final-lab-project-219",
+    "storage_bucket": "final-lab-project-219.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897807971743:android:f6623caae8ba1f2d3079aa",
+        "android_client_info": {
+          "package_name": "com.example.final_lab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB3FWcDNEK2c2HhNRRZsFFiEqtH3P82ow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,1139 @@
+@startuml
+set namespaceSeparator ::
+
+class "final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository" {
+  -CollectionReference<Object?> _applicationsCollection
+  +dynamic applyForJob()
+  +dynamic applyForInternship()
+  +Stream<List<AppliedPosition>> getAppliedPositionsStream()
+  +dynamic hasUserApplied()
+  +Stream<List<AppliedPosition>> getAllAppliedPositionsStream()
+  +dynamic updateApplicationStatus()
+  +dynamic deleteApplication()
+}
+
+"final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "final_lab::data::AuthRepository.dart::AuthRepository" {
+  +Stream<User?> authStateChanges
+  +dynamic login()
+  +dynamic signup()
+  +User? getLoggedInUser()
+  +dynamic resetPassword()
+  +dynamic sendVerificationEmail()
+  +dynamic changePassword()
+  +dynamic changeName()
+  +dynamic logout()
+  -dynamic _removeFcmToken()
+}
+
+"final_lab::data::AuthRepository.dart::AuthRepository" o-- "dart::async::Stream<User>"
+
+class "final_lab::data::internships_repository.dart::InternshipsRepository" {
+  +CollectionReference<Object?> internshipsCollection
+  +dynamic addInternship()
+  +dynamic updateInternship()
+  +dynamic deleteInternship()
+  +Stream<List<Internship>> loadAllInternships()
+  +dynamic loadAllInternshipsOnce()
+  +List<Internship> convertToInternships()
+  +dynamic getInternshipById()
+  +Stream<Internship?> getinternshipstreamById()
+}
+
+"final_lab::data::internships_repository.dart::InternshipsRepository" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "final_lab::data::jobs_repository.dart::JobsRepository" {
+  +CollectionReference<Object?> jobsCollection
+  +dynamic addJob()
+  +dynamic updateJob()
+  +dynamic deleteJob()
+  +Stream<List<Job>> loadAllJobs()
+  +dynamic loadAllJobsOnce()
+  +List<Job> convertToJobs()
+  +dynamic getJobById()
+  +Stream<Job?> getJobStreamById()
+}
+
+"final_lab::data::jobs_repository.dart::JobsRepository" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "final_lab::data::media_repository.dart::MediaRepository" {
+  +Cloudinary cloudinary
+  +dynamic uploadImage()
+  +dynamic uploadPdf()
+}
+
+"final_lab::data::media_repository.dart::MediaRepository" o-- "cloudinary_sdk::src::cloudinary.dart::Cloudinary"
+
+class "final_lab::data::notification_repository.dart::NotificationRepository" {
+  -FirebaseFirestore _firestore
+  +Stream<List<UserNotification>> getUserNotificationsStream()
+  +Stream<int> getUnreadNotificationCountStream()
+  +dynamic markNotificationAsRead()
+  +dynamic markAllNotificationsAsRead()
+  +dynamic deleteNotification()
+  +dynamic clearAllNotifications()
+  +dynamic createNotification()
+  +dynamic createStatusUpdateNotification()
+  +dynamic debugUserNotifications()
+  -dynamic _checkForDuplicateNotification()
+  -String _extractStatusFromMessage()
+  -bool _messagesAreSimilar()
+}
+
+"final_lab::data::notification_repository.dart::NotificationRepository" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "final_lab::data::ProfileRepository.dart::UserRepository" {
+  +CollectionReference<Object?> newUserCollection
+  +dynamic addUser()
+  +Stream<NewUser?> getUserStream()
+  +dynamic getUser()
+  +dynamic hasUserProfile()
+  +dynamic updateUser()
+  +dynamic deleteUser()
+}
+
+"final_lab::data::ProfileRepository.dart::UserRepository" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+"get::get_state_manager::src::rx_flutter::rx_disposable.dart::GetxService" <|-- "final_lab::data::ProfileRepository.dart::UserRepository"
+
+class "final_lab::firebase_options.dart::DefaultFirebaseOptions" {
+  {static} +FirebaseOptions web
+  {static} +FirebaseOptions android
+  {static} +FirebaseOptions ios
+  {static} +FirebaseOptions macos
+  {static} +FirebaseOptions windows
+  {static} +FirebaseOptions currentPlatform
+}
+
+"final_lab::firebase_options.dart::DefaultFirebaseOptions" o-- "firebase_core_platform_interface::firebase_core_platform_interface.dart::FirebaseOptions"
+
+class "final_lab::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::main.dart::MyApp"
+
+class "final_lab::model::AppliedPositions.dart::AppliedPosition" {
+  +String id
+  +String userId
+  +String positionId
+  +String positionType
+  +DateTime appliedDate
+  +String status
+  +Map<String, dynamic> toMap()
+  +AppliedPosition copyWith()
+}
+
+class "final_lab::model::Internship.dart::Internship" {
+  +String id
+  +String title
+  +String companyName
+  +String? image
+  +String location
+  +String description
+  +String stipend
+  +String duration
+  {static} +Internship fromMap()
+  +Map<String, dynamic> toMap()
+}
+
+class "final_lab::model::Job.dart::Job" {
+  +String id
+  +String userid
+  +String? image
+  +String jobtitle
+  +String companyname
+  +String location
+  +String salary
+  +String description
+  {static} +Job fromMap()
+  +Map<String, dynamic> toMap()
+}
+
+class "final_lab::model::Notification.dart::UserNotification" {
+  +String id
+  +String userId
+  +String title
+  +String message
+  +DateTime timestamp
+  +bool isRead
+  +String? applicationId
+  +String? positionType
+  +String? positionId
+  +Map<String, dynamic> toMap()
+  +UserNotification copyWith()
+}
+
+class "final_lab::model::profile.dart::NewUser" {
+  +String docId
+  +String userId
+  +String firstName
+  +String lastName
+  +String email
+  +String phoneNumber
+  +String? image
+  +String? resume
+  +Map<String, dynamic> toMap()
+  {static} +NewUser fromMap()
+}
+
+class "final_lab::services::fcm_service.dart::FCMService" {
+  {static} +dynamic saveDeviceToken()
+  {static} +void listenTokenRefresh()
+}
+
+class "final_lab::services::fcm_v1_service.dart::FCMV1Service" {
+  {static} -String _serviceAccountJson
+  {static} -String _projectId
+  {static} -String _fcmScope
+  {static} -dynamic _getAccessToken()
+  {static} +dynamic sendNotificationWithToken()
+  {static} -dynamic _refreshUserToken()
+  {static} +dynamic sendNotificationToUser()
+  {static} +dynamic sendApplicationStatusNotification()
+  {static} +dynamic sendTestNotification()
+  {static} +dynamic sendNotificationToTopic()
+  {static} +dynamic sendNewJobNotification()
+  {static} +dynamic sendNewInternshipNotification()
+}
+
+class "final_lab::services::notification_service.dart::NotificationService" {
+  {static} -FirebaseMessaging _firebaseMessaging
+  {static} -FlutterLocalNotificationsPlugin _localNotifications
+  -NotificationRepository _notificationRepository
+  +RxString fcmToken
+  +RxBool isInitialized
+  +RxBool isWebPlatform
+  +void onInit()
+  -dynamic _initializeNotifications()
+  -dynamic _requestPermission()
+  -dynamic _initializeLocalNotifications()
+  -dynamic _createNotificationChannel()
+  -dynamic _getFCMToken()
+  -void _setupTokenRefreshListener()
+  -dynamic _saveTokenToUserProfile()
+  +dynamic ensureUserRegistered()
+  -void _handleForegroundMessage()
+  -void _handleNotificationTap()
+  -dynamic _handleAppLaunchFromNotification()
+  -void _onNotificationTap()
+  -dynamic _showLocalNotification()
+  +dynamic showTestNotification()
+  -String _getRouteFromType()
+  -void _navigateToNotificationPage()
+  +dynamic sendStatusUpdateNotification()
+  +dynamic getCurrentToken()
+  +dynamic refreshToken()
+  +dynamic subscribeToTopic()
+  +dynamic unsubscribeFromTopic()
+}
+
+"final_lab::services::notification_service.dart::NotificationService" o-- "firebase_messaging::firebase_messaging.dart::FirebaseMessaging"
+"final_lab::services::notification_service.dart::NotificationService" o-- "flutter_local_notifications::src::flutter_local_notifications_plugin.dart::FlutterLocalNotificationsPlugin"
+"final_lab::services::notification_service.dart::NotificationService" o-- "final_lab::data::notification_repository.dart::NotificationRepository"
+"final_lab::services::notification_service.dart::NotificationService" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"final_lab::services::notification_service.dart::NotificationService" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::services::notification_service.dart::NotificationService"
+
+class "final_lab::services::user_registaration_service.dart::UserRegistrationService" {
+  {static} -FirebaseFirestore _firestore
+  {static} -FirebaseAuth _auth
+  {static} +dynamic registerUser()
+  {static} +dynamic updateLastLogin()
+  {static} +dynamic userExists()
+  {static} +dynamic getUserData()
+  {static} +dynamic ensureUserDocumentExists()
+  {static} +dynamic markUserInactive()
+}
+
+"final_lab::services::user_registaration_service.dart::UserRegistrationService" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"final_lab::services::user_registaration_service.dart::UserRegistrationService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+
+class "final_lab::ui::admin_home::admin_home.dart::AdminHomePage" {
+  +State<AdminHomePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::admin_home::admin_home.dart::AdminHomePage"
+
+class "final_lab::ui::admin_home::admin_home.dart::_AdminHomePageState" {
+  +int currentPage
+  +Widget build()
+  +Widget getPage()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::admin_home::admin_home.dart::_AdminHomePageState"
+
+class "final_lab::ui::admin_home::applications::applications.dart::ApplicationsPage" {
+  -Color _getStatusColor()
+  -dynamic _confirmLogout()
+  -void _showDeleteOptions()
+  -void _confirmAndDeleteApplication()
+  +Widget build()
+}
+
+"get::get_state_manager::src::simple::get_view.dart::GetView" <|-- "final_lab::ui::admin_home::applications::applications.dart::ApplicationsPage"
+
+class "final_lab::ui::admin_home::applications::applications.dart::ApplicationsPageBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::admin_home::applications::applications.dart::ApplicationsPageBinding"
+
+class "final_lab::ui::admin_home::applications::applications_detail.dart::ApplicationDetailPage" {
+  -Color _getStatusColor()
+  -Widget _buildProfileDetailRow()
+  +Widget build()
+}
+
+"get::get_state_manager::src::simple::get_view.dart::GetView" <|-- "final_lab::ui::admin_home::applications::applications_detail.dart::ApplicationDetailPage"
+
+class "final_lab::ui::admin_home::applications::applications_detail.dart::ApplicationDetailBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::admin_home::applications::applications_detail.dart::ApplicationDetailBinding"
+
+class "final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" {
+  -AuthRepository _authRepository
+  -AppliedPositionsRepository _appliedPositionsRepository
+  -JobsRepository _jobsRepository
+  -InternshipsRepository _internshipsRepository
+  +Rxn<User> currentUser
+  +Stream<List<AppliedPosition>> appliedPositionsStream
+  +void onInit()
+  +Stream<dynamic> getPositionDetailsStream()
+  +dynamic deleteApplication()
+}
+
+"final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository"
+"final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::jobs_repository.dart::JobsRepository"
+"final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::internships_repository.dart::InternshipsRepository"
+"final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<User>"
+"final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel" o-- "dart::async::Stream<List<AppliedPosition>>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::admin_home::applications::view_model::applications_vm.dart::AppliedPositionsViewModel"
+
+class "final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" {
+  -AppliedPositionsRepository _appliedPositionsRepository
+  -JobsRepository _jobsRepository
+  -InternshipsRepository _internshipsRepository
+  -UserRepository _profileRepository
+  -NotificationRepository _notificationRepository
+  +Rx<AppliedPosition?> appliedPosition
+  +Rx<dynamic> positionDetails
+  +Rx<NewUser?> applicantProfile
+  +RxBool isLoading
+  +RxString currentStatus
+  +RxBool isNotificationSending
+  +void onInit()
+  -void _initializeRepository()
+  -dynamic _fetchDetails()
+  +dynamic updateApplicationStatus()
+  +void setSelectedStatus()
+}
+
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "final_lab::data::jobs_repository.dart::JobsRepository"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "final_lab::data::internships_repository.dart::InternshipsRepository"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "final_lab::data::ProfileRepository.dart::UserRepository"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "final_lab::data::notification_repository.dart::NotificationRepository"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<AppliedPosition>"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<dynamic>"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<NewUser>"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::admin_home::applications::view_model::application_detail_vm.dart::ApplicationDetailViewModel"
+
+class "final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsPage" {
+  +ProfileViewModel profileViewModel
+  -AuthRepository _authRepository
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  -Color _getStatusColor()
+  -void _showCancelApplicationDialog()
+  -void _cancelApplication()
+  +Widget build()
+}
+
+"final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsPage" o-- "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel"
+"final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsPage" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsPage" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"get::get_state_manager::src::simple::get_view.dart::GetView" <|-- "final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsPage"
+
+class "final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::applied_positions::applied_positions_page.dart::AppliedPositionsBinding"
+
+class "final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" {
+  -AuthRepository _authRepository
+  -AppliedPositionsRepository _appliedPositionsRepository
+  -JobsRepository _jobsRepository
+  -InternshipsRepository _internshipsRepository
+  -LoginViewModel _loginViewModel
+  +Rxn<User> currentUser
+  +RxBool isAdmin
+  -BehaviorSubject<List<AppliedPosition>> _applicationsSubject
+  -StreamSubscription<List<AppliedPosition>>? _currentApplicationsSubscription
+  +Stream<List<AppliedPosition>> appliedPositionsStream
+  +void onInit()
+  -void _checkAdminStatus()
+  -void _updateApplicationsStream()
+  +Stream<dynamic> getPositionDetailsStream()
+  +dynamic deleteApplication()
+  +dynamic cancelApplication()
+  +void onClose()
+}
+
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::jobs_repository.dart::JobsRepository"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "final_lab::data::internships_repository.dart::InternshipsRepository"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "final_lab::ui::auth::view_models::login_vm.dart::LoginViewModel"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<User>"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "rxdart::src::subjects::behavior_subject.dart::BehaviorSubject<List<AppliedPosition>>"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "dart::async::StreamSubscription<List<AppliedPosition>>"
+"final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel" o-- "dart::async::Stream<List<AppliedPosition>>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::applied_positions::view_model::applied_positions_vm.dart::AppliedPositionsViewModel"
+
+class "final_lab::ui::auth::forgot_password.dart::ForgotPasswordScreen" {
+  +State<ForgotPasswordScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::auth::forgot_password.dart::ForgotPasswordScreen"
+
+class "final_lab::ui::auth::forgot_password.dart::_ForgotPasswordScreenState" {
+  +TextEditingController emailController
+  +bool isPasswordVisible
+  +ResetPasswordViewModel resetViewModel
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::auth::forgot_password.dart::_ForgotPasswordScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::auth::forgot_password.dart::_ForgotPasswordScreenState" o-- "final_lab::ui::auth::view_models::reset_password_vm.dart::ResetPasswordViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::auth::forgot_password.dart::_ForgotPasswordScreenState"
+
+class "final_lab::ui::auth::forgot_password.dart::ResetPasswordBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::auth::forgot_password.dart::ResetPasswordBinding"
+
+class "final_lab::ui::auth::link_send.dart::LinkSendScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::auth::link_send.dart::LinkSendScreen"
+
+class "final_lab::ui::auth::login.dart::LoginScreen" {
+  +_LoginScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::auth::login.dart::LoginScreen"
+
+class "final_lab::ui::auth::login.dart::_LoginScreenState" {
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +bool isPasswordVisible
+  +LoginViewModel loginViewModel
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::auth::login.dart::_LoginScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::auth::login.dart::_LoginScreenState" o-- "final_lab::ui::auth::view_models::login_vm.dart::LoginViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::auth::login.dart::_LoginScreenState"
+
+class "final_lab::ui::auth::login.dart::LoginBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::auth::login.dart::LoginBinding"
+
+class "final_lab::ui::auth::signup.dart::RegisterScreen" {
+  +State<RegisterScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::auth::signup.dart::RegisterScreen"
+
+class "final_lab::ui::auth::signup.dart::_RegisterScreenState" {
+  +TextEditingController emailController
+  +TextEditingController passwordController
+  +TextEditingController confirmPasswordController
+  +bool isPasswordVisible
+  +bool isPasswordVisible2
+  +SignUpViewModel signUpViewModel
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::auth::signup.dart::_RegisterScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::auth::signup.dart::_RegisterScreenState" o-- "final_lab::ui::auth::view_models::signup_vm.dart::SignUpViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::auth::signup.dart::_RegisterScreenState"
+
+class "final_lab::ui::auth::signup.dart::SignUpBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::auth::signup.dart::SignUpBinding"
+
+class "final_lab::ui::auth::view_models::auth_decider_screen.dart::AuthDeciderScreen" {
+  +State<AuthDeciderScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::auth::view_models::auth_decider_screen.dart::AuthDeciderScreen"
+
+class "final_lab::ui::auth::view_models::auth_decider_screen.dart::_AuthDeciderScreenState" {
+  +void initState()
+  -void _decideRoute()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::auth::view_models::auth_decider_screen.dart::_AuthDeciderScreenState"
+
+class "final_lab::ui::auth::view_models::login_vm.dart::LoginViewModel" {
+  +AuthRepository authRepository
+  +RxBool isLoading
+  +dynamic login()
+  +bool isUserLoggedIn()
+  +User? getLoggedInUser()
+}
+
+"final_lab::ui::auth::view_models::login_vm.dart::LoginViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::auth::view_models::login_vm.dart::LoginViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::auth::view_models::login_vm.dart::LoginViewModel"
+
+class "final_lab::ui::auth::view_models::reset_password_vm.dart::ResetPasswordViewModel" {
+  +AuthRepository authRepository
+  +RxBool isLoading
+  +dynamic reset()
+}
+
+"final_lab::ui::auth::view_models::reset_password_vm.dart::ResetPasswordViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::auth::view_models::reset_password_vm.dart::ResetPasswordViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::auth::view_models::reset_password_vm.dart::ResetPasswordViewModel"
+
+class "final_lab::ui::auth::view_models::signup_vm.dart::SignUpViewModel" {
+  +AuthRepository authRepository
+  +RxBool isLoading
+  +dynamic signup()
+}
+
+"final_lab::ui::auth::view_models::signup_vm.dart::SignUpViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::auth::view_models::signup_vm.dart::SignUpViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::auth::view_models::signup_vm.dart::SignUpViewModel"
+
+class "final_lab::ui::auth::welcome_screen.dart::WelcomeScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::auth::welcome_screen.dart::WelcomeScreen"
+
+class "final_lab::ui::internship::add_internship.dart::AddInternship" {
+  +State<AddInternship> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::internship::add_internship.dart::AddInternship"
+
+class "final_lab::ui::internship::add_internship.dart::_AddInternshipState" {
+  +TextEditingController titleController
+  +TextEditingController companyNameController
+  +TextEditingController locationController
+  +TextEditingController stipendController
+  +TextEditingController descriptionController
+  +TextEditingController durationController
+  +AddInternshipViewModel addInternshipVM
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::internship::add_internship.dart::_AddInternshipState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::internship::add_internship.dart::_AddInternshipState" o-- "final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::internship::add_internship.dart::_AddInternshipState"
+
+class "final_lab::ui::internship::add_internship.dart::AddInternshipBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::internship::add_internship.dart::AddInternshipBinding"
+
+class "final_lab::ui::internship::edit_internship.dart::EditInternship" {
+  +State<EditInternship> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::internship::edit_internship.dart::EditInternship"
+
+class "final_lab::ui::internship::edit_internship.dart::_EditInternshipState" {
+  +TextEditingController titleController
+  +TextEditingController companyNameController
+  +TextEditingController locationController
+  +TextEditingController stipendController
+  +TextEditingController descriptionController
+  +TextEditingController durationController
+  +EditInternshipViewModel editInternshipVM
+  +Internship internship
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::internship::edit_internship.dart::_EditInternshipState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::internship::edit_internship.dart::_EditInternshipState" o-- "final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel"
+"final_lab::ui::internship::edit_internship.dart::_EditInternshipState" o-- "final_lab::model::Internship.dart::Internship"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::internship::edit_internship.dart::_EditInternshipState"
+
+class "final_lab::ui::internship::edit_internship.dart::UpdateInternshipBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::internship::edit_internship.dart::UpdateInternshipBinding"
+
+class "final_lab::ui::internship::internships.dart::InternshipsPage" {
+  +State<InternshipsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::internship::internships.dart::InternshipsPage"
+
+class "final_lab::ui::internship::internships.dart::_InternshipsPageState" {
+  +InternshipsViewModel internshipsViewModel
+  +AuthRepository authRepository
+  +void initState()
+  -dynamic _confirmLogout()
+  +Widget build()
+}
+
+"final_lab::ui::internship::internships.dart::_InternshipsPageState" o-- "final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel"
+"final_lab::ui::internship::internships.dart::_InternshipsPageState" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::internship::internships.dart::_InternshipsPageState"
+
+class "final_lab::ui::internship::internships.dart::InternshipsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::internship::internships.dart::InternshipsBinding"
+
+class "final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel" {
+  +AuthRepository authRepository
+  +InternshipsRepository internshipsRepository
+  +MediaRepository mediaRepository
+  +RxBool isSaving
+  +Rxn<XFile> image
+  +dynamic addInternship()
+  +dynamic pickImage()
+}
+
+"final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel" o-- "final_lab::data::internships_repository.dart::InternshipsRepository"
+"final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel" o-- "final_lab::data::media_repository.dart::MediaRepository"
+"final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<XFile>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::internship::view_models::add_internship_vm.dart::AddInternshipViewModel"
+
+class "final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel" {
+  +AuthRepository authRepository
+  +InternshipsRepository internshipsRepository
+  +MediaRepository mediaRepository
+  +RxBool isUpdating
+  +Rxn<XFile> image
+  +dynamic updateInternship()
+  +dynamic pickImage()
+}
+
+"final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel" o-- "final_lab::data::internships_repository.dart::InternshipsRepository"
+"final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel" o-- "final_lab::data::media_repository.dart::MediaRepository"
+"final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<XFile>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::internship::view_models::edit_internship_vm.dart::EditInternshipViewModel"
+
+class "final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel" {
+  +AuthRepository authRepository
+  +InternshipsRepository internshipsRepository
+  +RxBool isLoading
+  +RxList<Internship> internships
+  +void onInit()
+  +void loadAllInternships()
+  +dynamic deleteInternship()
+}
+
+"final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel" o-- "final_lab::data::internships_repository.dart::InternshipsRepository"
+"final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<Internship>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel"
+
+class "final_lab::ui::job::add_job.dart::AddJob" {
+  +State<AddJob> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::job::add_job.dart::AddJob"
+
+class "final_lab::ui::job::add_job.dart::_AddJobState" {
+  +TextEditingController jobtitleController
+  +TextEditingController companynameController
+  +TextEditingController locationController
+  +TextEditingController salaryController
+  +TextEditingController descriptionController
+  +AddJobViewModel addjobVM
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::job::add_job.dart::_AddJobState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::job::add_job.dart::_AddJobState" o-- "final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::job::add_job.dart::_AddJobState"
+
+class "final_lab::ui::job::add_job.dart::AddJobBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::job::add_job.dart::AddJobBinding"
+
+class "final_lab::ui::job::edit_job.dart::EditJob" {
+  +State<EditJob> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::job::edit_job.dart::EditJob"
+
+class "final_lab::ui::job::edit_job.dart::_EditJobState" {
+  +TextEditingController jobtitleController
+  +TextEditingController companynameController
+  +TextEditingController locationController
+  +TextEditingController salaryController
+  +TextEditingController descriptionController
+  +EditJobViewModel editJobVM
+  +Job job
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::job::edit_job.dart::_EditJobState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::job::edit_job.dart::_EditJobState" o-- "final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel"
+"final_lab::ui::job::edit_job.dart::_EditJobState" o-- "final_lab::model::Job.dart::Job"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::job::edit_job.dart::_EditJobState"
+
+class "final_lab::ui::job::edit_job.dart::UpdateJobBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::job::edit_job.dart::UpdateJobBinding"
+
+class "final_lab::ui::job::jobs.dart::JobsPage" {
+  +State<JobsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::job::jobs.dart::JobsPage"
+
+class "final_lab::ui::job::jobs.dart::_JobsPageState" {
+  +JobsViewModel jobsViewModel
+  +AuthRepository authRepository
+  +void initState()
+  -dynamic _confirmLogout()
+  +Widget build()
+}
+
+"final_lab::ui::job::jobs.dart::_JobsPageState" o-- "final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel"
+"final_lab::ui::job::jobs.dart::_JobsPageState" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::job::jobs.dart::_JobsPageState"
+
+class "final_lab::ui::job::jobs.dart::JobsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::job::jobs.dart::JobsBinding"
+
+class "final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel" {
+  +AuthRepository authRepository
+  +JobsRepository jobsRepository
+  +MediaRepository mediaRepository
+  +RxBool isSaving
+  +Rxn<XFile> image
+  +dynamic addJob()
+  +dynamic pickImage()
+}
+
+"final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel" o-- "final_lab::data::jobs_repository.dart::JobsRepository"
+"final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel" o-- "final_lab::data::media_repository.dart::MediaRepository"
+"final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<XFile>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::job::view_models::add_job_vm.dart::AddJobViewModel"
+
+class "final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel" {
+  +AuthRepository authRepository
+  +JobsRepository jobsRepository
+  +MediaRepository mediaRepository
+  +RxBool isUpdating
+  +Rxn<XFile> image
+  +dynamic updateJob()
+  +dynamic pickImage()
+}
+
+"final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel" o-- "final_lab::data::jobs_repository.dart::JobsRepository"
+"final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel" o-- "final_lab::data::media_repository.dart::MediaRepository"
+"final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<XFile>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::job::view_models::edit_job_vm.dart::EditJobViewModel"
+
+class "final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel" {
+  +AuthRepository authRepository
+  +JobsRepository jobsRepository
+  +RxBool isLoading
+  +RxList<Job> jobs
+  +void onInit()
+  +void loadAllJobs()
+  +dynamic deleteJob()
+}
+
+"final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel" o-- "final_lab::data::jobs_repository.dart::JobsRepository"
+"final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<Job>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel"
+
+class "final_lab::ui::notifications::notifications_page.dart::NotificationsPage" {
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  +Widget build()
+  -void _showClearConfirmationDialog()
+}
+
+"final_lab::ui::notifications::notifications_page.dart::NotificationsPage" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"get::get_state_manager::src::simple::get_view.dart::GetView" <|-- "final_lab::ui::notifications::notifications_page.dart::NotificationsPage"
+
+class "final_lab::ui::notifications::notifications_page.dart::NotificationsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::notifications::notifications_page.dart::NotificationsBinding"
+
+class "final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" {
+  -AuthRepository _authRepository
+  -NotificationRepository _notificationRepository
+  +RxList<UserNotification> notifications
+  +RxBool isLoading
+  +RxString currentUserId
+  -StreamSubscription<List<UserNotification>>? _notificationsSubscription
+  -StreamSubscription<User?>? _authSubscription
+  +int unreadNotificationsCount
+  +bool hasUnreadNotifications
+  +void onInit()
+  -void _initializeRepository()
+  -void _setupAuthListener()
+  -dynamic _loadNotifications()
+  -void _clearNotifications()
+  +dynamic refreshNotifications()
+  +dynamic markAsRead()
+  +dynamic markAllAsRead()
+  +dynamic deleteNotification()
+  +dynamic clearAllNotifications()
+  +void onNotificationTap()
+  +void onClose()
+}
+
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "final_lab::data::notification_repository.dart::NotificationRepository"
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<UserNotification>"
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "dart::async::StreamSubscription<List<UserNotification>>"
+"final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel" o-- "dart::async::StreamSubscription<User>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::notifications::view_model::notifications_vm.dart::NotificationsViewModel"
+
+class "final_lab::ui::profile::create_update_profile.dart::SaveProfilePage" {
+  +NewUser? existingUser
+  +State<SaveProfilePage> createState()
+}
+
+"final_lab::ui::profile::create_update_profile.dart::SaveProfilePage" o-- "final_lab::model::profile.dart::NewUser"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::profile::create_update_profile.dart::SaveProfilePage"
+
+class "final_lab::ui::profile::create_update_profile.dart::_SaveProfilePageState" {
+  +TextEditingController firstNameController
+  +TextEditingController lastNameController
+  +TextEditingController emailController
+  +TextEditingController phoneController
+  +ProfileViewModel profileViewModel
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"final_lab::ui::profile::create_update_profile.dart::_SaveProfilePageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"final_lab::ui::profile::create_update_profile.dart::_SaveProfilePageState" o-- "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::profile::create_update_profile.dart::_SaveProfilePageState"
+
+class "final_lab::ui::profile::create_update_profile.dart::SaveProfileBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::profile::create_update_profile.dart::SaveProfileBinding"
+
+class "final_lab::ui::profile::profile.dart::ShowProfilePage" {
+  +State<ShowProfilePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::profile::profile.dart::ShowProfilePage"
+
+class "final_lab::ui::profile::profile.dart::_ShowProfilePageState" {
+  +ProfileViewModel profileViewModel
+  -AuthRepository _authRepository
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  +void initState()
+  -Widget _buildProfileInfoCard()
+  -Widget _buildResumeInfoCard()
+  -Widget _buildDeleteAccountCard()
+  +Widget build()
+}
+
+"final_lab::ui::profile::profile.dart::_ShowProfilePageState" o-- "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel"
+"final_lab::ui::profile::profile.dart::_ShowProfilePageState" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::profile::profile.dart::_ShowProfilePageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::profile::profile.dart::_ShowProfilePageState"
+
+class "final_lab::ui::profile::profile.dart::ShowProfileBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::profile::profile.dart::ShowProfileBinding"
+
+class "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" {
+  +AuthRepository authRepository
+  +UserRepository userRepository
+  +MediaRepository mediaRepository
+  +RxBool isAdding
+  +RxBool isDeleting
+  +Rxn<XFile> image
+  +Rxn<XFile> resumeFile
+  +Rxn<NewUser> currentUser
+  +void onInit()
+  +dynamic addUser()
+  +dynamic getUser()
+  +dynamic updateUser()
+  +dynamic deleteUser()
+  +dynamic pickImage()
+  +dynamic pickResume()
+}
+
+"final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" o-- "final_lab::data::ProfileRepository.dart::UserRepository"
+"final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" o-- "final_lab::data::media_repository.dart::MediaRepository"
+"final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<XFile>"
+"final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<NewUser>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel"
+
+class "final_lab::ui::splash_screen::splash_screen.dart::SplashScreen" {
+  +State<SplashScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::splash_screen::splash_screen.dart::SplashScreen"
+
+class "final_lab::ui::splash_screen::splash_screen.dart::_SplashScreenState" {
+  +void initState()
+  -void _checkAuthStatusAndNavigate()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::splash_screen::splash_screen.dart::_SplashScreenState"
+
+class "final_lab::ui::user_home::custom_app_bar.dart::CustomAppBar" {
+  +GlobalKey<ScaffoldState> scaffoldKey
+  +String? title
+  +Size preferredSize
+  +Widget build()
+  +Stream<int> getUnreadNotificationCountStream()
+}
+
+"final_lab::ui::user_home::custom_app_bar.dart::CustomAppBar" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"final_lab::ui::user_home::custom_app_bar.dart::CustomAppBar" o-- "dart::ui::Size"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::user_home::custom_app_bar.dart::CustomAppBar"
+"flutter::src::widgets::preferred_size.dart::PreferredSizeWidget" <|-- "final_lab::ui::user_home::custom_app_bar.dart::CustomAppBar"
+
+class "final_lab::ui::user_home::custom_drawer.dart::CustomDrawer" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::user_home::custom_drawer.dart::CustomDrawer"
+
+class "final_lab::ui::user_home::home.dart::HomePage" {
+  +State<HomePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::user_home::home.dart::HomePage"
+
+class "final_lab::ui::user_home::home.dart::_HomePageState" {
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  -AuthRepository _authRepository
+  -ProfileViewModel _profileViewModel
+  -JobsViewModel _jobsViewModel
+  -InternshipsViewModel _internshipsViewModel
+  -StreamSubscription<User?> _authStateSubscription
+  -AnimationController _animationController
+  -Animation<double> _fadeAnimation
+  +void initState()
+  -void _fetchUserProfile()
+  +void dispose()
+  +Widget build()
+  -Widget _buildSectionHeader()
+  -Widget _buildLoadingIndicator()
+  -Widget _buildEmptyState()
+  -Widget _buildJobCard()
+  -Widget _buildInternshipCard()
+  -Widget _buildCareerTipsSection()
+  -String _getGreeting()
+}
+
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "dart::async::StreamSubscription<User>"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "flutter::src::animation::animation_controller.dart::AnimationController"
+"final_lab::ui::user_home::home.dart::_HomePageState" o-- "flutter::src::animation::animation.dart::Animation<double>"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::user_home::home.dart::_HomePageState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin" <|-- "final_lab::ui::user_home::home.dart::_HomePageState"
+
+class "final_lab::ui::user_home::home.dart::HomeBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::user_home::home.dart::HomeBinding"
+
+class "final_lab::ui::user_home::internships::internship_details_page.dart::InternshipDetailsPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::user_home::internships::internship_details_page.dart::InternshipDetailsPage"
+
+class "final_lab::ui::user_home::internships::internship_details_page.dart::InternshipDetailsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::user_home::internships::internship_details_page.dart::InternshipDetailsBinding"
+
+class "final_lab::ui::user_home::internships::user_internships.dart::UserInternshipsPage" {
+  +State<UserInternshipsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::user_home::internships::user_internships.dart::UserInternshipsPage"
+
+class "final_lab::ui::user_home::internships::user_internships.dart::_UserInternshipsPageState" {
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  +InternshipsViewModel internshipsViewModel
+  +ProfileViewModel profileViewModel
+  +AuthRepository authRepository
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::user_home::internships::user_internships.dart::_UserInternshipsPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"final_lab::ui::user_home::internships::user_internships.dart::_UserInternshipsPageState" o-- "final_lab::ui::internship::view_models::internships_vm.dart::InternshipsViewModel"
+"final_lab::ui::user_home::internships::user_internships.dart::_UserInternshipsPageState" o-- "final_lab::ui::profile::view_models::profile_vm.dart::ProfileViewModel"
+"final_lab::ui::user_home::internships::user_internships.dart::_UserInternshipsPageState" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::user_home::internships::user_internships.dart::_UserInternshipsPageState"
+
+class "final_lab::ui::user_home::internships::user_internships.dart::UserInternshipsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::user_home::internships::user_internships.dart::UserInternshipsBinding"
+
+class "final_lab::ui::user_home::internships::view_models::internship_details_vm.dart::InternshipDetailsViewModel" {
+  -AuthRepository _authRepository
+  -AppliedPositionsRepository _appliedPositionsRepository
+  -UserRepository _userRepository
+  +RxBool hasUserApplied
+  +dynamic checkApplicationStatus()
+  +dynamic applyForInternship()
+}
+
+"final_lab::ui::user_home::internships::view_models::internship_details_vm.dart::InternshipDetailsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::user_home::internships::view_models::internship_details_vm.dart::InternshipDetailsViewModel" o-- "final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository"
+"final_lab::ui::user_home::internships::view_models::internship_details_vm.dart::InternshipDetailsViewModel" o-- "final_lab::data::ProfileRepository.dart::UserRepository"
+"final_lab::ui::user_home::internships::view_models::internship_details_vm.dart::InternshipDetailsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::user_home::internships::view_models::internship_details_vm.dart::InternshipDetailsViewModel"
+
+class "final_lab::ui::user_home::jobs::job_details_page.dart::JobDetailsPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::user_home::jobs::job_details_page.dart::JobDetailsPage"
+
+class "final_lab::ui::user_home::jobs::job_details_page.dart::JobDetailsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::user_home::jobs::job_details_page.dart::JobDetailsBinding"
+
+class "final_lab::ui::user_home::jobs::user_jobs.dart::UserJobsPage" {
+  +State<UserJobsPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::user_home::jobs::user_jobs.dart::UserJobsPage"
+
+class "final_lab::ui::user_home::jobs::user_jobs.dart::_UserJobsPageState" {
+  -GlobalKey<ScaffoldState> _scaffoldKey
+  +JobsViewModel jobsViewModel
+  +AuthRepository authRepository
+  +void initState()
+  +Widget build()
+}
+
+"final_lab::ui::user_home::jobs::user_jobs.dart::_UserJobsPageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<ScaffoldState>"
+"final_lab::ui::user_home::jobs::user_jobs.dart::_UserJobsPageState" o-- "final_lab::ui::job::view_models::jobs_vm.dart::JobsViewModel"
+"final_lab::ui::user_home::jobs::user_jobs.dart::_UserJobsPageState" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::user_home::jobs::user_jobs.dart::_UserJobsPageState"
+
+class "final_lab::ui::user_home::jobs::user_jobs.dart::UserJobsBinding" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "final_lab::ui::user_home::jobs::user_jobs.dart::UserJobsBinding"
+
+class "final_lab::ui::user_home::jobs::view_models::job_details_vm.dart::JobDetailsViewModel" {
+  -AuthRepository _authRepository
+  -AppliedPositionsRepository _appliedPositionsRepository
+  -UserRepository _userRepository
+  +RxBool hasUserApplied
+  +dynamic checkApplicationStatus()
+  +dynamic applyForJob()
+}
+
+"final_lab::ui::user_home::jobs::view_models::job_details_vm.dart::JobDetailsViewModel" o-- "final_lab::data::AuthRepository.dart::AuthRepository"
+"final_lab::ui::user_home::jobs::view_models::job_details_vm.dart::JobDetailsViewModel" o-- "final_lab::data::applied_positions_repository.dart::AppliedPositionsRepository"
+"final_lab::ui::user_home::jobs::view_models::job_details_vm.dart::JobDetailsViewModel" o-- "final_lab::data::ProfileRepository.dart::UserRepository"
+"final_lab::ui::user_home::jobs::view_models::job_details_vm.dart::JobDetailsViewModel" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "final_lab::ui::user_home::jobs::view_models::job_details_vm.dart::JobDetailsViewModel"
+
+class "final_lab::ui::user_home::user_home.dart::UserHomePage" {
+  +State<UserHomePage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "final_lab::ui::user_home::user_home.dart::UserHomePage"
+
+class "final_lab::ui::user_home::user_home.dart::_UserHomePageState" {
+  +int currentPage
+  +void initState()
+  -void _initBinding()
+  +Widget build()
+  +Widget getPage()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "final_lab::ui::user_home::user_home.dart::_UserHomePageState"
+
+class "final_lab::ui::user_home::user_main_scaffold.dart::UserMainScaffold" {
+  +int currentIndex
+  +dynamic Function(int) onTabSelected
+  +Widget body
+  +Widget build()
+}
+
+"final_lab::ui::user_home::user_main_scaffold.dart::UserMainScaffold" o-- "null::dynamic Function(int)"
+"final_lab::ui::user_home::user_main_scaffold.dart::UserMainScaffold" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "final_lab::ui::user_home::user_main_scaffold.dart::UserMainScaffold"
+
+
+@enduml
