@@ -118,15 +118,19 @@ Ensure you have the following installed:
 ## 📸 Screenshots
 
 Welcome Screen
+
 ![image](https://github.com/user-attachments/assets/456f291c-93eb-4e63-87fc-c438e2f485df)
 
 Login Page
+
 ![image](https://github.com/user-attachments/assets/720d0de8-4bfe-4434-9b35-93671db32d6f)
 
 Signup Page
+
 ![image](https://github.com/user-attachments/assets/6988b641-eaed-4e37-a941-fcc4074155d8)
 
 User Home Page
+
 ![image](https://github.com/user-attachments/assets/b9d67060-21e0-4daf-a675-ce95a60b06cd)
 
 ![image](https://github.com/user-attachments/assets/184f8c6f-a642-49a7-a981-f24bd3461cd2)
@@ -134,6 +138,7 @@ User Home Page
 ![image](https://github.com/user-attachments/assets/9f398986-b26b-47d0-9446-8b905fce69f5)
 
 Admin Side
+
 ![image](https://github.com/user-attachments/assets/3cecf0d8-d754-4fd5-9ab1-02815146468b)
 
 ![image](https://github.com/user-attachments/assets/09ff38d8-ba9d-4068-9424-2154a1e49bea)
@@ -145,23 +150,29 @@ Admin Side
 ![image](https://github.com/user-attachments/assets/d1bd299a-5fc4-4ece-81b4-88b6ac7a5ead)
 
 Guest Page
+
 ![image](https://github.com/user-attachments/assets/d972d850-31be-4c1c-930e-8ed9e548c42e)
 
 ![image](https://github.com/user-attachments/assets/240540d7-8ccd-4c86-80db-ffa9652308a5)
 
 Jobs Page
+
 ![image](https://github.com/user-attachments/assets/ec8b9d69-f7ae-471a-8a27-064180506a8d)
 
 Internships Page
+
 ![image](https://github.com/user-attachments/assets/93a898cf-dd9c-4f00-8dbf-85906161b926)
 
 Applied Positions Page
+
 ![image](https://github.com/user-attachments/assets/97052735-5629-4fe2-bbef-a01a2f7d8629)
 
 Profile Page
+
 ![image](https://github.com/user-attachments/assets/35abca75-222b-46c2-964a-9a00b427a528)
 
 Notifications Page
+
 ![image](https://github.com/user-attachments/assets/2ed2b5e0-399a-4d97-91ef-dbc89da7fc68)
 
 ![image](https://github.com/user-attachments/assets/87c0f3ef-b171-43fe-8156-bcaedac066cc)
