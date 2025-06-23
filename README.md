@@ -15,7 +15,9 @@ And interact with companies looking for potential candidates.
 This app serves both educational and professional purposes, making it a powerful prototype or production-level solution for university career centers, HR startups, or recruitment services.
 
 It has two roles:
-Admin Panel(Can add/edit/delete Jobs/Internships, Can view applications submitted by users and can update their status to send notifications to users about their applications)
+
+Admin Panel (Can add/edit/delete Jobs/Internships, Can view applications submitted by users and can update their status to send notifications to users about their applications).
+
 User Side
 
 
@@ -169,5 +171,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📬 Contact
 
 Maintainer: Danish Riasat
-GitHub: [DanishR07](https://github.com/DanishR07)  
+
+GitHub: [DanishR07](https://github.com/DanishR07) 
+
 Email: danishriasat792@gmail.com
